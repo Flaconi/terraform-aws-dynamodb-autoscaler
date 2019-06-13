@@ -42,7 +42,6 @@ variable "dynamodb_table_arn" {
 }
 
 variable "dynamodb_indexes" {
-  type        = list(string)
   description = "List of DynamoDB indexes"
   default     = []
 }
