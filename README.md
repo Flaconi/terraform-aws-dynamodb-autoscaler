@@ -44,6 +44,11 @@ We literally have [*hundreds of terraform modules*][terraform_modules] that are 
 
 ## Usage
 
+
+**IMPORTANT:** The `master` branch is used in `source` just as an example. In your code, do not pin to `master` because there may be breaking changes between releases.
+Instead pin to the release tag (e.g. `?ref=tags/x.y.z`) of one of our [latest releases](https://github.com/cloudposse/terraform-aws-dynamodb-autoscaler/releases).
+
+
 ```hcl
 module "dynamodb_autoscaler" {
   source                       = "git::https://github.com/cloudposse/terraform-aws-dynamodb-autoscaler.git?ref=master"
@@ -77,12 +82,11 @@ Available targets:
   lint                                Lint terraform code
 
 ```
-
 ## Inputs
 
 | Name | Description | Type | Default | Required |
 |------|-------------|:----:|:-----:|:-----:|
-| attributes | Additional attributes (e.g. `1`) | list | `<list>` | no |
+| attributes | Additional attributes (e.g. `1`) | list(string) | `<list>` | no |
 | autoscale_max_read_capacity | DynamoDB autoscaling max read capacity | string | `20` | no |
 | autoscale_max_write_capacity | DynamoDB autoscaling max write capacity | string | `20` | no |
 | autoscale_min_read_capacity | DynamoDB autoscaling min read capacity | string | `5` | no |
@@ -90,14 +94,13 @@ Available targets:
 | autoscale_read_target | The target value for DynamoDB read autoscaling | string | `50` | no |
 | autoscale_write_target | The target value for DynamoDB write autoscaling | string | `50` | no |
 | delimiter | Delimiter to be used between `namespace`, `stage`, `name` and `attributes` | string | `-` | no |
-| dynamodb_indexes | List of DynamoDB indexes | list | `<list>` | no |
+| dynamodb_indexes | List of DynamoDB indexes | list(string) | `<list>` | no |
 | dynamodb_table_arn | DynamoDB table ARN | string | - | yes |
 | dynamodb_table_name | DynamoDB table name | string | - | yes |
 | enabled | Set to false to prevent the module from creating any resources | string | `true` | no |
 | name | Name  (e.g. `app` or `cluster`) | string | - | yes |
-| namespace | Namespace (e.g. `eg` or `cp`) | string | - | yes |
 | stage | Stage (e.g. `prod`, `dev`, `staging`, `infra`) | string | - | yes |
-| tags | Additional tags (e.g. map(`BusinessUnit`,`XYZ`) | map | `<map>` | no |
+| tags | Additional tags (e.g. map(`BusinessUnit`,`XYZ`) | map(string) | `<map>` | no |
 
 
 
@@ -180,7 +183,7 @@ In general, PRs are welcome. We follow the typical "fork-and-pull" Git workflow.
 
 ## Copyright
 
-Copyright © 2017-2018 [Cloud Posse, LLC](https://cpco.io/copyright)
+Copyright © 2017-2019 [Cloud Posse, LLC](https://cpco.io/copyright)
 
 
 
