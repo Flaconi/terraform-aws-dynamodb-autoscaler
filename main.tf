@@ -11,6 +11,8 @@ module "default_label" {
 }
 
 data "aws_iam_policy_document" "assume_role" {
+  count = var.enabled ? 1 : 0
+
   statement {
     sid = ""
 
@@ -30,11 +32,13 @@ data "aws_iam_policy_document" "assume_role" {
 resource "aws_iam_role" "autoscaler" {
   count              = var.enabled ? 1 : 0
   name               = "${module.default_label.id}${var.delimiter}autoscaler"
-  assume_role_policy = data.aws_iam_policy_document.assume_role.json
+  assume_role_policy = join("", data.aws_iam_policy_document.assume_role.*.json)
   tags               = module.default_label.tags
 }
 
 data "aws_iam_policy_document" "autoscaler" {
+  count = var.enabled ? 1 : 0
+
   statement {
     sid = ""
 
@@ -53,10 +57,13 @@ resource "aws_iam_role_policy" "autoscaler" {
   count  = var.enabled ? 1 : 0
   name   = "${module.default_label.id}${var.delimiter}autoscaler${var.delimiter}dynamodb"
   role   = join("", aws_iam_role.autoscaler.*.id)
-  policy = data.aws_iam_policy_document.autoscaler.json
+  policy = join("", data.aws_iam_policy_document.autoscaler.*.json)
+
 }
 
 data "aws_iam_policy_document" "autoscaler_cloudwatch" {
+  count = var.enabled ? 1 : 0
+
   statement {
     sid = ""
 
@@ -76,7 +83,8 @@ resource "aws_iam_role_policy" "autoscaler_cloudwatch" {
   count  = var.enabled ? 1 : 0
   name   = "${module.default_label.id}${var.delimiter}autoscaler${var.delimiter}cloudwatch"
   role   = join("", aws_iam_role.autoscaler.*.id)
-  policy = data.aws_iam_policy_document.autoscaler_cloudwatch.json
+  policy = join("", data.aws_iam_policy_document.autoscaler_cloudwatch.*.json)
+
 }
 
 resource "aws_appautoscaling_target" "read_target" {
